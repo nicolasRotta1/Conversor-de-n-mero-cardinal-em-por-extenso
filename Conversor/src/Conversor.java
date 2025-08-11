@@ -47,9 +47,14 @@ public class Conversor {
     }
 
     public void logica(int numero) {
-        String texto = Integer.toString(numero);
-        int tamanhoNumero = texto.length();
-        char[] caracteres = texto.toCharArray();
+        String textooriginal = Integer.toString(numero);
+        String numeros = textooriginal.replaceAll("[^0-9]", "");
+
+        StringBuilder resultado = new StringBuilder();
+
+
+        int tamanhoNumero = numeros.length();
+        char[] caracteres = numeros.toCharArray();
 
         String unidadeMilhao = null;
         String centenaMilhar = null;
@@ -67,7 +72,10 @@ public class Conversor {
         boolean temDezena = false;
         boolean temUnidade = false;
 
-        StringBuilder resultado = new StringBuilder();
+        if (textooriginal.charAt(0) == '-') {
+            resultado.append("menos ");
+        }
+
 
         switch (tamanhoNumero) {
             case 1:
@@ -131,11 +139,13 @@ public class Conversor {
             if (tamanhoNumero > 1) {
                 resultado.append(" ");
             }
+            temMilhao = true;
         }
 
         if (centenaMilhar != null && !centenaMilhar.equals("0")) {
             temCentenaMilhar = true;
             resultado.append(centenah.get(centenaMilhar)).append(" ");
+            temCentenaMilhar = true;
         }
 
         if (dezenaMilhar != null && !dezenaMilhar.equals("0")) {
@@ -155,6 +165,7 @@ public class Conversor {
                     resultado.append(" ");
                 }
             }
+            temDezenaMilhar = true;
         }
 
 
@@ -163,6 +174,7 @@ public class Conversor {
         } else if ((centenaMilhar != null && !centenaMilhar.equals("0")) ||
                 (dezenaMilhar != null && !dezenaMilhar.equals("0"))) {
             resultado.append("mil ");
+            temUnidadeMilhar = true;
         }
 
         if (centena != null && !centena.equals("0")) {
@@ -170,19 +182,23 @@ public class Conversor {
             if (!((dezena != null && dezena.equals("0")) && (unidade != null && unidade.equals("0")))) {
                 resultado.append(" e ");
             }
+            temCentena = true;
         }
 
         if (dezena != null && dezena.equals("1") && unidade != null) {
             resultado.append(unidadeh.get(dezena + unidade));
+            temDezena = true;
         } else {
             if (dezena != null && !dezena.equals("0")) {
                 resultado.append(dezenah.get(dezena));
+                temDezena = true;
                 if (unidade != null && !unidade.equals("0")) {
                     resultado.append(" e ");
                 }
             }
             if (unidade != null && !unidade.equals("0")) {
                 resultado.append(unidadeh.get(unidade));
+                temUnidade = true;
             }
         }
         System.out.println(resultado.toString().trim());
