@@ -59,51 +59,133 @@ public class Conversor {
         String dezena = null;
         String unidade = null;
 
+        boolean temMilhao = false;
+        boolean temCentenaMilhar = false;
+        boolean temDezenaMilhar = false;
+        boolean temUnidadeMilhar = false;
+        boolean temCentena = false;
+        boolean temDezena = false;
+        boolean temUnidade = false;
+
         StringBuilder resultado = new StringBuilder();
 
-        if (tamanhoNumero == 2 && numero < 20) {
-            unidade = String.valueOf(caracteres[0]);
-
-
-        } else if (tamanhoNumero == 2) {
-            dezena = String.valueOf(caracteres[0]);
-            unidade = String.valueOf(caracteres[1]);
-
-        } else if (tamanhoNumero == 3) {
-           centena = String.valueOf(caracteres[0]);
-           dezena = String.valueOf(caracteres[1]);
-           unidade = String.valueOf(caracteres[2]);
-        } else if (tamanhoNumero == 4) {
-           unidadeMilhar = String.valueOf(caracteres[0]);
-           centena = String.valueOf(caracteres[1]);
-           dezena = String.valueOf(caracteres[2]);
-           unidade = String.valueOf(caracteres[3]);
-        } else if (tamanhoNumero == 5) {
-            dezenaMilhar = String.valueOf(caracteres[0]);
-            unidadeMilhar = String.valueOf(caracteres[1]);
-            centena = String.valueOf(caracteres[2]);
-            dezena = String.valueOf(caracteres[3]);
-            unidade = String.valueOf(caracteres[4]);
-        } else if (tamanhoNumero == 5) {
-            centenaMilhar = String.valueOf(caracteres[0]);
-            dezenaMilhar = String.valueOf(caracteres[1]);
-            unidadeMilhar = String.valueOf(caracteres[2]);
-            centena = String.valueOf(caracteres[3]);
-            dezena = String.valueOf(caracteres[4]);
-            unidade = String.valueOf(caracteres[5]);
-        } else if (tamanhoNumero == 6) {
-            unidadeMilhao = String.valueOf(caracteres[0]);
-            centenaMilhar = String.valueOf(caracteres[1]);
-            dezenaMilhar = String.valueOf(caracteres[2]);
-            unidadeMilhar = String.valueOf(caracteres[3]);
-            centena = String.valueOf(caracteres[4]);
-            dezena = String.valueOf(caracteres[5]);
-            unidade = String.valueOf(caracteres[6]);
+        switch (tamanhoNumero) {
+            case 1:
+                unidade = String.valueOf(caracteres[0]);
+                break;
+            case 2:
+                if (numero < 20) {
+                    unidade = String.valueOf(caracteres[0]) + String.valueOf(caracteres[1]);
+                } else {
+                    dezena = String.valueOf(caracteres[0]);
+                    unidade = String.valueOf(caracteres[1]);
+                }
+                break;
+            case 3:
+                centena = String.valueOf(caracteres[0]);
+                dezena = String.valueOf(caracteres[1]);
+                unidade = String.valueOf(caracteres[2]);
+                break;
+            case 4:
+                unidadeMilhar = String.valueOf(caracteres[0]);
+                centena = String.valueOf(caracteres[1]);
+                dezena = String.valueOf(caracteres[2]);
+                unidade = String.valueOf(caracteres[3]);
+                break;
+            case 5:
+                dezenaMilhar = String.valueOf(caracteres[0]);
+                unidadeMilhar = String.valueOf(caracteres[1]);
+                centena = String.valueOf(caracteres[2]);
+                dezena = String.valueOf(caracteres[3]);
+                unidade = String.valueOf(caracteres[4]);
+                break;
+            case 6:
+                centenaMilhar = String.valueOf(caracteres[0]);
+                dezenaMilhar = String.valueOf(caracteres[1]);
+                unidadeMilhar = String.valueOf(caracteres[2]);
+                centena = String.valueOf(caracteres[3]);
+                dezena = String.valueOf(caracteres[4]);
+                unidade = String.valueOf(caracteres[5]);
+                break;
+            case 7:
+                unidadeMilhao = String.valueOf(caracteres[0]);
+                centenaMilhar = String.valueOf(caracteres[1]);
+                dezenaMilhar = String.valueOf(caracteres[2]);
+                unidadeMilhar = String.valueOf(caracteres[3]);
+                centena = String.valueOf(caracteres[4]);
+                dezena = String.valueOf(caracteres[5]);
+                unidade = String.valueOf(caracteres[6]);
+                break;
+            default:
+                System.out.println("Número fora do intervalo suportado.");
+                return;
         }
 
-        if (unidadeMilhao != null && !unidadeMilhao.equals("0")){
-            resultado.append(unidadeh.get(unidadeMilhao));
+        if (unidadeMilhao != null && !unidadeMilhao.equals("0")) {
+            if (unidadeMilhao.equals("1")){
+                resultado.append(unidadeh.get(unidadeMilhao)).append(" milhão");
+            }else{
+                resultado.append(unidadeh.get(unidadeMilhao)).append(" milhões");
+            }
 
+            if (tamanhoNumero > 1) {
+                resultado.append(" ");
+            }
         }
+
+        if (centenaMilhar != null && !centenaMilhar.equals("0")) {
+            temCentenaMilhar = true;
+            resultado.append(centenah.get(centenaMilhar)).append(" ");
+        }
+
+        if (dezenaMilhar != null && !dezenaMilhar.equals("0")) {
+            if (temCentenaMilhar){
+                resultado.append("e ");
+            }
+
+            if (dezenaMilhar.equals("1") && unidadeMilhar != null && !unidadeMilhar.equals("0")) {
+                String dezenaMilharUnidade = dezenaMilhar + unidadeMilhar;
+                resultado.append(unidadeh.get(dezenaMilharUnidade)).append(" mil ");
+                unidadeMilhar = "0";
+            } else {
+                resultado.append(dezenah.get(dezenaMilhar));
+                if (unidadeMilhar != null && !unidadeMilhar.equals("0")) {
+                    resultado.append(" e ");
+                } else {
+                    resultado.append(" ");
+                }
+            }
+        }
+
+
+        if (unidadeMilhar != null && !unidadeMilhar.equals("0")) {
+            resultado.append(unidadeh.get(unidadeMilhar)).append(" mil ");
+        } else if ((centenaMilhar != null && !centenaMilhar.equals("0")) ||
+                (dezenaMilhar != null && !dezenaMilhar.equals("0"))) {
+            resultado.append("mil ");
+        }
+
+        if (centena != null && !centena.equals("0")) {
+            resultado.append(centenah.get(centena));
+            if (!((dezena != null && dezena.equals("0")) && (unidade != null && unidade.equals("0")))) {
+                resultado.append(" e ");
+            }
+        }
+
+        if (dezena != null && dezena.equals("1") && unidade != null) {
+            resultado.append(unidadeh.get(dezena + unidade));
+        } else {
+            if (dezena != null && !dezena.equals("0")) {
+                resultado.append(dezenah.get(dezena));
+                if (unidade != null && !unidade.equals("0")) {
+                    resultado.append(" e ");
+                }
+            }
+            if (unidade != null && !unidade.equals("0")) {
+                resultado.append(unidadeh.get(unidade));
+            }
+        }
+        System.out.println(resultado.toString().trim());
     }
+
 }

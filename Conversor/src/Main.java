@@ -11,10 +11,12 @@ public class Main {
         Conversor conversor = new Conversor();
         Scanner sc = new Scanner(System.in);
         System.out.println("--Conversor de numeral cardinal em numero por extenso--");
-        System.out.print("Digite um número: ");
-        int numero = sc.nextInt();
-
-        conversor.logica(numero);
+        while (true){
+            System.out.print("Digite um número: ");
+            int numero = sc.nextInt();
+            conversor.logica(numero);
+            System.out.println();
+        }
 
     }
 }
